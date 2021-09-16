@@ -9,15 +9,13 @@ Future initTaskBox() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TaskEntryAdapter());
   Hive.registerAdapter(TaskTrackerAdapter());
-  taskBox = await Hive.openBox<TaskEntry>('taskBox2R');
+  taskBox = await Hive.openBox<TaskEntry>('taskBoxw3Rs');
   taskTrackerBox = await Hive.openBox<TaskTracker>('taskTrackerBox');
 
   // populate
-  taskBox.put('123', TaskEntry.newTask(taskName: 'Peplayon', taskIcon: '😗'));
-  taskBox.put(
-      '124', TaskEntry.newTask(taskName: 'Muring-muring', taskIcon: '🤬'));
-  taskBox.put(
-      '125', TaskEntry.newTask(taskName: 'Ngoding', taskIcon: '🧑🏻‍💻'));
+  taskBox.put(1, TaskEntry.newTask(taskName: 'Lari-lari', taskIcon: '🏃🏻‍♂️'));
+  taskBox.put(2, TaskEntry.newTask(taskName: 'Muring-muring', taskIcon: '🤬'));
+  taskBox.put(3, TaskEntry.newTask(taskName: 'Ngoding', taskIcon: '🧑🏻‍💻'));
 
   List<DateTime> listPeplayon = [];
   listPeplayon.add(DateTime.now());
@@ -25,8 +23,8 @@ Future initTaskBox() async {
   listPeplayon.add(DateTime.now().subtract(Duration(days: 3)));
 
   TaskTracker dummyTracker = TaskTracker(trackedDates: listPeplayon);
-  taskTrackerBox.put('123', dummyTracker);
-  taskTrackerBox.put('124', dummyTracker);
+  taskTrackerBox.put(1, dummyTracker);
+  taskTrackerBox.put(2, dummyTracker);
 
   List<TaskEntry> sample = taskBox.values.toList() as List<TaskEntry>;
   sample.forEach((element) {

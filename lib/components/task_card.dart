@@ -8,7 +8,7 @@ import '../constant.dart';
 class TaskCard extends StatelessWidget {
   @override
   TaskCard(
-      {required String taskId,
+      {required int taskId,
       required String cardTitle,
       required String emojiIcon,
       required DateTime selectedDate,
@@ -20,12 +20,12 @@ class TaskCard extends StatelessWidget {
     this.onTap = onTap;
   }
 
-  late String taskId;
+  late int taskId;
   late String cardTitle;
   late String emojiIcon;
   late bool disableClick;
   late DateTime selectedDate;
-  late void Function(String) onTap;
+  late void Function(int) onTap;
 
   @override
   Widget build(BuildContext context) {

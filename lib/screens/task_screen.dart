@@ -7,7 +7,7 @@ import 'package:flutter_personal_tracker/model/task_tracker.dart';
 import 'package:intl/intl.dart';
 
 class TaskScreen extends StatefulWidget {
-  final String taskId;
+  final int taskId;
 
   TaskScreen({required this.taskId});
 

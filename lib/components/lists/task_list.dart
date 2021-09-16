@@ -16,7 +16,7 @@ class TaskList extends StatefulWidget {
 class _TaskListState extends State<TaskList> {
   int id = 0;
 
-  handleNavigation(String taskId) {
+  handleNavigation(int taskId) {
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -34,7 +34,7 @@ class _TaskListState extends State<TaskList> {
     List<Widget> renderTaskCard() {
       int index = 0;
       return taskList.map((task) {
-        String taskId = taskBox.keyAt(index++);
+        int taskId = taskBox.keyAt(index++);
         return TaskCard(
           taskId: taskId,
           cardTitle: task.taskName,
