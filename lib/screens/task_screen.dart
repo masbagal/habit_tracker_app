@@ -71,7 +71,6 @@ class _TaskScreenState extends State<TaskScreen> {
         ),
         child: SafeArea(
           bottom: false,
-          top: false,
           child: Stack(
             children: [
               Align(
