@@ -122,10 +122,9 @@ class _CalendarViewState extends State<CalendarView> {
               );
             },
           ),
-          firstDay: widget.firstDate != null
-              ? widget.firstDate!.subtract(Duration(days: 5))
-              : DateTime.now(),
-          lastDay: DateTime.now().add(Duration(days: 90)),
+          firstDay:
+              widget.firstDate != null ? widget.firstDate! : DateTime.now(),
+          lastDay: DateTime.now(),
           focusedDay: DateTime.now(),
           headerStyle:
               HeaderStyle(titleTextStyle: TextStyle(color: Colors.white)),
