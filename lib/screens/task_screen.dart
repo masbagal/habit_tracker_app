@@ -178,7 +178,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                 style: kTextLight,
                               ),
                               Text(
-                                '$totalCompletedTimes times from $daysSinceStart',
+                                '$totalCompletedTimes times in $daysSinceStart days',
                                 style: kTextBold,
                               ),
                             ],
