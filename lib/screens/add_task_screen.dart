@@ -89,7 +89,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                                 labelStyle: TextStyle(
                                   color: Colors.purple[100],
                                 )),
-                            style: kText.copyWith(fontSize: 24),
+                            style: kText.copyWith(fontSize: 18),
                           ),
                           SizedBox(height: 24),
                           Align(
@@ -97,7 +97,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                             child: Text(
                               'Task Icon',
                               style: kText.copyWith(
-                                  fontSize: 24, color: Colors.purple[100]),
+                                  fontSize: 18, color: Colors.purple[100]),
                             ),
                           ),
                           SizedBox(height: 24),
@@ -164,7 +164,6 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                   height: 250,
                   child: EmojiPicker(
                       onEmojiSelected: (Category category, Emoji emoji) {
-                        print(emoji);
                         setState(() {
                           taskIcon = emoji.emoji;
                           showEmojiPicker = false;

@@ -42,6 +42,9 @@ class _TaskScreenState extends State<TaskScreen> {
 
     int totalCompletedTimes = taskTracker.trackedDates.length;
     bool isSelectedDayTaskDone = taskTracker.checkIsDoneWhereDate(selectedDate);
+    Duration durationSinceStart =
+        DateTime.now().difference(task.taskStartDate!);
+    int daysSinceStart = durationSinceStart.inDays + 1;
 
     void handleMarkAsDone() {
       _confettiController.play();
@@ -175,7 +178,7 @@ class _TaskScreenState extends State<TaskScreen> {
                                 style: kTextLight,
                               ),
                               Text(
-                                '$totalCompletedTimes times',
+                                '$totalCompletedTimes times from $daysSinceStart',
                                 style: kTextBold,
                               ),
                             ],
@@ -190,18 +193,29 @@ class _TaskScreenState extends State<TaskScreen> {
                               });
                             },
                           ),
-                          SizedBox(height: 24),
-                          MaterialButton(
+                          SizedBox(height: 48),
+                          RawMaterialButton(
+                            fillColor: isSelectedDayTaskDone
+                                ? Colors.grey[800]
+                                : Colors.green[900],
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(16)),
                             onPressed: isSelectedDayTaskDone
                                 ? removeDoneMark
                                 : handleMarkAsDone,
-                            textColor: Colors.white,
-                            color: isSelectedDayTaskDone
-                                ? Colors.grey[800]
-                                : Colors.green[900],
-                            child: isSelectedDayTaskDone
-                                ? Text('Mark as not done')
-                                : Text('Mark as done'),
+                            autofocus: false,
+                            child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: isSelectedDayTaskDone
+                                  ? Text(
+                                      'Mark as not done',
+                                      style: kTextBold,
+                                    )
+                                  : Text(
+                                      'Mark as done',
+                                      style: kTextBold,
+                                    ),
+                            ),
                           ),
                           SizedBox(height: 48),
                         ],
