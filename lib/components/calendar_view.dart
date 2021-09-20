@@ -81,16 +81,9 @@ class _CalendarViewState extends State<CalendarView> {
               widget.onSelectedDateChanged(selectedDay);
             });
           },
-          onFormatChanged: (format) {
-            print(format);
-          },
           headerVisible: false,
           rangeSelectionMode: RangeSelectionMode.disabled,
           calendarBuilders: CalendarBuilders(
-            headerTitleBuilder: (context, datetime) {
-              final month = DateFormat.yMMM().format(datetime);
-              return Text(month, style: kText);
-            },
             todayBuilder: (context, day, focusedDay) {
               return DateCell(
                 day: day,

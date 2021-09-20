@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_personal_tracker/helpers/task_db.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:flutter_personal_tracker/screens/home_screen.dart';
 
 Future main() async {
   await initTaskBox();
-  print('Name: ${taskBox.get('123')}');
   runApp(MyApp());
 }
 
@@ -14,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Habitngan',
       theme: ThemeData(
         // This is the theme of your application.
         //r

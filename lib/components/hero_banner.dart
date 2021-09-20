@@ -31,7 +31,6 @@ class HeroBanner extends StatelessWidget {
   int countTaskDoneCount() {
     int count = 0;
     taskTrackerBox.keys.forEach((taskId) {
-      print('taskId' + taskId.toString());
       TaskTracker tracker = taskTrackerBox.get(taskId,
           defaultValue: TaskTracker(trackedDates: []));
       if (tracker.isTodayTaskDone()) {
