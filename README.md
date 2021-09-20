@@ -3,7 +3,11 @@
 A Flutter project to learn Flutter and to track personal habit. I hate losing streaks and I can visualize how long I can consistently do it.
 
 
-https://user-images.githubusercontent.com/16324649/133610374-e9def052-7d14-4195-accc-d503bc069b2c.mov
+
+
+https://user-images.githubusercontent.com/16324649/133986088-e3688b80-9c65-493b-a6d1-833af874b08a.mov
+
+
 
 
 
