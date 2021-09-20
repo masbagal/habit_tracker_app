@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:confetti/confetti.dart';
 import 'package:flutter_personal_tracker/components/calendar_view.dart';
 import 'package:flutter_personal_tracker/constant.dart';
 import 'package:flutter_personal_tracker/helpers/task_db.dart';
@@ -16,7 +17,21 @@ class TaskScreen extends StatefulWidget {
 }
 
 class _TaskScreenState extends State<TaskScreen> {
+  late ConfettiController _confettiController;
   DateTime selectedDate = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+    _confettiController =
+        ConfettiController(duration: Duration(milliseconds: 400));
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _confettiController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +44,7 @@ class _TaskScreenState extends State<TaskScreen> {
     bool isSelectedDayTaskDone = taskTracker.checkIsDoneWhereDate(selectedDate);
 
     void handleMarkAsDone() {
+      _confettiController.play();
       taskTracker.addDateEntry(selectedDate);
       taskTrackerBox.put(widget.taskId, taskTracker);
       setState(() {});
@@ -54,131 +70,150 @@ class _TaskScreenState extends State<TaskScreen> {
           ),
         ),
         child: SafeArea(
-            bottom: false,
-            top: false,
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 30, left: 32, right: 40),
-                    child: GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Row(
+          bottom: false,
+          top: false,
+          child: Stack(
+            children: [
+              Align(
+                alignment: Alignment.topCenter,
+                child: ConfettiWidget(
+                  confettiController: _confettiController,
+                  blastDirectionality: BlastDirectionality.explosive,
+                  colors: const [
+                    Colors.green,
+                    Colors.blue,
+                    Colors.pink,
+                    Colors.orange,
+                    Colors.purple
+                  ], // manually specify the colors to be used
+                ),
+              ),
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(top: 30, left: 32, right: 40),
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Row(
+                          children: [
+                            Icon(Icons.chevron_left, color: Colors.white),
+                            Text(
+                              'Back',
+                              style: kText,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(top: 40, left: 40, right: 40),
+                      child: Stack(
+                        alignment: Alignment.centerRight,
                         children: [
-                          Icon(Icons.chevron_left, color: Colors.white),
-                          Text(
-                            'Back',
-                            style: kText,
+                          Opacity(
+                            opacity: 0.45,
+                            child: Container(
+                              child: Text(
+                                task.taskIcon,
+                                style: TextStyle(
+                                    fontSize: 64, color: Colors.white),
+                              ),
+                            ),
+                          ),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(dateDisplay, style: kHeroSubTitleStyle),
+                                  isSelectedDayTaskDone
+                                      ? Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8),
+                                          child: Icon(
+                                            Icons.circle,
+                                            size: 8,
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : Container(),
+                                  isSelectedDayTaskDone
+                                      ? Text(
+                                          'DONE',
+                                          style: TextStyle(
+                                              color: Colors.greenAccent,
+                                              fontSize: 16),
+                                        )
+                                      : Container(),
+                                ],
+                              ),
+                              SizedBox(height: 16),
+                              Text(task.taskName, style: kTaskTitleText),
+                              SizedBox(height: 24),
+                              Divider(
+                                color: Colors.white,
+                              )
+                            ],
                           )
                         ],
                       ),
                     ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.only(top: 40, left: 40, right: 40),
-                    child: Stack(
-                      alignment: Alignment.centerRight,
-                      children: [
-                        Opacity(
-                          opacity: 0.45,
-                          child: Container(
-                            child: Text(
-                              task.taskIcon,
-                              style:
-                                  TextStyle(fontSize: 64, color: Colors.white),
-                            ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 40, vertical: 16),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                'Completed',
+                                style: kTextLight,
+                              ),
+                              Text(
+                                '$totalCompletedTimes times',
+                                style: kTextBold,
+                              ),
+                            ],
                           ),
-                        ),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(dateDisplay, style: kHeroSubTitleStyle),
-                                isSelectedDayTaskDone
-                                    ? Container(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 8),
-                                        child: Icon(
-                                          Icons.circle,
-                                          size: 8,
-                                          color: Colors.white,
-                                        ),
-                                      )
-                                    : Container(),
-                                isSelectedDayTaskDone
-                                    ? Text(
-                                        'DONE',
-                                        style: TextStyle(
-                                            color: Colors.greenAccent,
-                                            fontSize: 16),
-                                      )
-                                    : Container(),
-                              ],
-                            ),
-                            SizedBox(height: 16),
-                            Text(task.taskName, style: kTaskTitleText),
-                            SizedBox(height: 24),
-                            Divider(
-                              color: Colors.white,
-                            )
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 40, vertical: 16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Completed',
-                              style: kTextLight,
-                            ),
-                            Text(
-                              '$totalCompletedTimes times',
-                              style: kTextBold,
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 36),
-                        CalendarView(
-                          firstDate: task.taskStartDate,
-                          monthTrackingData: taskTracker,
-                          onSelectedDateChanged: (DateTime date) {
-                            setState(() {
-                              selectedDate = date;
-                            });
-                          },
-                        ),
-                        SizedBox(height: 24),
-                        MaterialButton(
-                          onPressed: isSelectedDayTaskDone
-                              ? removeDoneMark
-                              : handleMarkAsDone,
-                          textColor: Colors.white,
-                          color: isSelectedDayTaskDone
-                              ? Colors.grey[800]
-                              : Colors.green[900],
-                          child: isSelectedDayTaskDone
-                              ? Text('Mark as not done')
-                              : Text('Mark as done'),
-                        ),
-                        SizedBox(height: 48),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-            )),
+                          SizedBox(height: 36),
+                          CalendarView(
+                            firstDate: task.taskStartDate,
+                            monthTrackingData: taskTracker,
+                            onSelectedDateChanged: (DateTime date) {
+                              setState(() {
+                                selectedDate = date;
+                              });
+                            },
+                          ),
+                          SizedBox(height: 24),
+                          MaterialButton(
+                            onPressed: isSelectedDayTaskDone
+                                ? removeDoneMark
+                                : handleMarkAsDone,
+                            textColor: Colors.white,
+                            color: isSelectedDayTaskDone
+                                ? Colors.grey[800]
+                                : Colors.green[900],
+                            child: isSelectedDayTaskDone
+                                ? Text('Mark as not done')
+                                : Text('Mark as done'),
+                          ),
+                          SizedBox(height: 48),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -171,8 +171,7 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
                         });
                       },
                       config: Config(
-                          columns: 5,
-                          // Issue: https://github.com/flutter/flutter/issues/28894
+                          columns: 7,
                           emojiSizeMax: 32,
                           verticalSpacing: 0,
                           horizontalSpacing: 0,
