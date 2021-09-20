@@ -25,10 +25,23 @@ class _TaskScreenState extends State<TaskScreen> {
     TaskTracker taskTracker = taskTrackerBox.get(widget.taskId,
         defaultValue: TaskTracker(trackedDates: []));
 
+    int totalCompletedTimes = taskTracker.trackedDates.length;
     bool isSelectedDayTaskDone = taskTracker.checkIsDoneWhereDate(selectedDate);
 
+    void handleMarkAsDone() {
+      taskTracker.addDateEntry(selectedDate);
+      taskTrackerBox.put(widget.taskId, taskTracker);
+      setState(() {});
+    }
+
+    void removeDoneMark() {
+      taskTracker.removeDateEntry(selectedDate);
+      taskTrackerBox.put(widget.taskId, taskTracker);
+      setState(() {});
+    }
+
     return Scaffold(
-      backgroundColor: Color(0x11162130),
+      backgroundColor: Color(0x77162130),
       body: Container(
         height: MediaQuery.of(context).size.height,
         decoration: BoxDecoration(
@@ -121,6 +134,7 @@ class _TaskScreenState extends State<TaskScreen> {
                     padding: const EdgeInsets.symmetric(
                         horizontal: 40, vertical: 16),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -130,34 +144,35 @@ class _TaskScreenState extends State<TaskScreen> {
                               style: kTextLight,
                             ),
                             Text(
-                              '12 times',
+                              '$totalCompletedTimes times',
                               style: kTextBold,
                             ),
                           ],
                         ),
-                        SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              'Longest Streak',
-                              style: kTextLight,
-                            ),
-                            Text(
-                              '5 streaks',
-                              style: kTextBold,
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 24),
+                        SizedBox(height: 36),
                         CalendarView(
+                          firstDate: task.taskStartDate,
                           monthTrackingData: taskTracker,
                           onSelectedDateChanged: (DateTime date) {
                             setState(() {
                               selectedDate = date;
                             });
                           },
-                        )
+                        ),
+                        SizedBox(height: 24),
+                        MaterialButton(
+                          onPressed: isSelectedDayTaskDone
+                              ? removeDoneMark
+                              : handleMarkAsDone,
+                          textColor: Colors.white,
+                          color: isSelectedDayTaskDone
+                              ? Colors.grey[800]
+                              : Colors.green[900],
+                          child: isSelectedDayTaskDone
+                              ? Text('Mark as not done')
+                              : Text('Mark as done'),
+                        ),
+                        SizedBox(height: 48),
                       ],
                     ),
                   )

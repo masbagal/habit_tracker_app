@@ -13,6 +13,10 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   DateTime selectedDate = DateTime.now();
 
+  void refreshHomePage() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context) => AddTaskScreen(),
               ),
             ).then((value) {
-              setState(() {});
+              refreshHomePage();
             });
           },
           elevation: 20,
@@ -72,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       TaskList(
                         selectedDate: selectedDate,
+                        refreshHomePage: refreshHomePage,
                       ),
                     ],
                   ))

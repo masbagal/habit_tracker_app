@@ -31,6 +31,7 @@ class HeroBanner extends StatelessWidget {
   int countTaskDoneCount() {
     int count = 0;
     taskTrackerBox.keys.forEach((taskId) {
+      print('taskId' + taskId.toString());
       TaskTracker tracker = taskTrackerBox.get(taskId,
           defaultValue: TaskTracker(trackedDates: []));
       if (tracker.isTodayTaskDone()) {
@@ -82,8 +83,12 @@ class HeroBanner extends StatelessWidget {
                 Text(date, style: kHeroTextStyle),
                 Padding(
                   padding: const EdgeInsets.only(top: 16.0),
-                  child: Text('$totalDoneTaskToday of $totalTasks tasks done',
-                      style: kHeroSubTitleStyle),
+                  child: totalTasks > 0
+                      ? Text('$totalDoneTaskToday of $totalTasks tasks done',
+                          style: kHeroSubTitleStyle)
+                      : Text('No tasks to be tracked',
+                          style: kHeroSubTitleStyle.copyWith(
+                              color: Colors.white.withOpacity(0.7))),
                 )
               ],
             ),

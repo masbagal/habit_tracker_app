@@ -31,4 +31,20 @@ class TaskTracker {
   bool isTodayTaskDone() {
     return checkIsDoneWhereDate(DateTime.now());
   }
+
+  void addDateEntry(DateTime date) {
+    trackedDates.add(date);
+  }
+
+  void removeDateEntry(DateTime date) {
+    int removedIndex = trackedDates.indexWhere((storedDate) {
+      bool isYearMatched = date.year == storedDate.year;
+      bool isMonthMatched = date.month == storedDate.month;
+      bool isDayMatched = date.day == storedDate.day;
+
+      return isYearMatched && isMonthMatched && isDayMatched;
+    });
+
+    trackedDates.removeAt(removedIndex);
+  }
 }

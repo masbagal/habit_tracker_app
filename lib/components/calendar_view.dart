@@ -15,18 +15,22 @@ class DateCell extends StatelessWidget {
       {required this.day,
       this.isDisabled = false,
       this.isSelected = false,
-      this.isDone = true});
+      this.isDone = false});
 
   @override
   Widget build(BuildContext context) {
     final dayText = DateFormat.d().format(day);
     final color = isDisabled ? Colors.white30 : Colors.white70;
     final isShowCheckmark = isDone && !isDisabled;
-    final boxColor = isSelected
-        ? Color(0xff904E95)
-        : isShowCheckmark
-            ? Colors.green
-            : Colors.transparent;
+    Color boxColor = Colors.transparent;
+    if (isSelected && isShowCheckmark) {
+      boxColor = Color(0xff1b5e20);
+    } else if (isSelected) {
+      boxColor = Color(0xff904E95);
+    } else if (isShowCheckmark) {
+      boxColor = Colors.green;
+    }
+
     return Container(
       padding: EdgeInsets.all(8),
       decoration: BoxDecoration(
@@ -41,9 +45,12 @@ class DateCell extends StatelessWidget {
 class CalendarView extends StatefulWidget {
   final TaskTracker monthTrackingData;
   final onSelectedDateChanged;
+  final DateTime? firstDate;
 
   CalendarView(
-      {required this.monthTrackingData, required this.onSelectedDateChanged});
+      {required this.monthTrackingData,
+      required this.onSelectedDateChanged,
+      this.firstDate});
 
   @override
   _CalendarViewState createState() => _CalendarViewState();
@@ -55,56 +62,83 @@ class _CalendarViewState extends State<CalendarView> {
 
   @override
   Widget build(BuildContext context) {
-    return TableCalendar(
-      onDaySelected: (selectedDay, focusedDay) {
-        setState(() {
-          _selectedDay = selectedDay;
-          _focusedDay = focusedDay; // update `_focusedDay` here as well
-          widget.onSelectedDateChanged(selectedDay);
-        });
-      },
-      calendarBuilders: CalendarBuilders(
-        headerTitleBuilder: (context, datetime) {
-          final month = DateFormat.yMMM().format(datetime);
-          return Text(month, style: kText);
-        },
-        todayBuilder: (context, day, focusedDay) {
-          return DateCell(
-            day: day,
-            isSelected: isSameDay(_selectedDay, day),
-          );
-        },
-        selectedBuilder: (context, day, focusedDay) {
-          return DateCell(day: day, isDisabled: true);
-        },
-        disabledBuilder: (context, day, focusedDay) {
-          return DateCell(day: day, isDisabled: true);
-        },
-        outsideBuilder: (context, day, focusedDay) {
-          return DateCell(day: day, isDisabled: true);
-        },
-        defaultBuilder: (context, day, focusedDay) {
-          return DateCell(
-              day: day,
-              isSelected: isSameDay(_selectedDay, day),
-              isDone: widget.monthTrackingData.checkIsDoneWhereDate(day));
-        },
-        dowBuilder: (context, day) {
-          final text = DateFormat.E().format(day);
-          final bool isWeekday = day.weekday == DateTime.sunday;
-          final color = isWeekday ? Colors.red : Colors.white70;
+    final month = DateFormat.yMMMM().format(_selectedDay);
+    return Column(
+      children: [
+        Align(
+          alignment: Alignment.bottomLeft,
+          child: Text(
+            month,
+            style: kTextBold,
+          ),
+        ),
+        SizedBox(height: 24),
+        TableCalendar(
+          onDaySelected: (selectedDay, focusedDay) {
+            setState(() {
+              _selectedDay = selectedDay;
+              _focusedDay = focusedDay; // update `_focusedDay` here as well
+              widget.onSelectedDateChanged(selectedDay);
+            });
+          },
+          onFormatChanged: (format) {
+            print(format);
+          },
+          headerVisible: false,
+          rangeSelectionMode: RangeSelectionMode.disabled,
+          calendarBuilders: CalendarBuilders(
+            headerTitleBuilder: (context, datetime) {
+              final month = DateFormat.yMMM().format(datetime);
+              return Text(month, style: kText);
+            },
+            todayBuilder: (context, day, focusedDay) {
+              return DateCell(
+                day: day,
+                isSelected: isSameDay(_selectedDay, day),
+                isDone: widget.monthTrackingData.checkIsDoneWhereDate(day),
+              );
+            },
+            selectedBuilder: (context, day, focusedDay) {
+              return DateCell(
+                  day: day,
+                  isDisabled: true,
+                  isDone: widget.monthTrackingData.checkIsDoneWhereDate(day));
+            },
+            disabledBuilder: (context, day, focusedDay) {
+              return DateCell(day: day, isDisabled: true);
+            },
+            outsideBuilder: (context, day, focusedDay) {
+              return DateCell(day: day, isDisabled: true);
+            },
+            defaultBuilder: (context, day, focusedDay) {
+              return DateCell(
+                  day: day,
+                  isSelected: isSameDay(_selectedDay, day),
+                  isDone: widget.monthTrackingData.checkIsDoneWhereDate(day));
+            },
+            dowBuilder: (context, day) {
+              final text = DateFormat.E().format(day);
+              final bool isWeekday = day.weekday == DateTime.sunday;
+              final color = isWeekday ? Colors.red : Colors.white70;
 
-          return Center(
-            child: Text(
-              text,
-              style: TextStyle(color: color),
-            ),
-          );
-        },
-      ),
-      firstDay: DateTime.utc(2021, 9, 1),
-      lastDay: DateTime.now(),
-      focusedDay: DateTime.now(),
+              return Center(
+                child: Text(
+                  text,
+                  style: TextStyle(color: color),
+                ),
+              );
+            },
+          ),
+          firstDay: widget.firstDate != null
+              ? widget.firstDate!.subtract(Duration(days: 5))
+              : DateTime.now(),
+          lastDay: DateTime.now().add(Duration(days: 90)),
+          focusedDay: DateTime.now(),
+          headerStyle:
+              HeaderStyle(titleTextStyle: TextStyle(color: Colors.white)),
+          availableGestures: AvailableGestures.horizontalSwipe,
+        ),
+      ],
     );
   }
 }

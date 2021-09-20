@@ -9,8 +9,8 @@ Future initTaskBox() async {
   await Hive.initFlutter();
   Hive.registerAdapter(TaskEntryAdapter());
   Hive.registerAdapter(TaskTrackerAdapter());
-  taskBox = await Hive.openBox<TaskEntry>('taskBoxw3Rs');
-  taskTrackerBox = await Hive.openBox<TaskTracker>('taskTrackerBox');
+  taskBox = await Hive.openBox<TaskEntry>('taskBosxsww3Rs');
+  taskTrackerBox = await Hive.openBox<TaskTracker>('tasksTrackerBox');
 
   // populate
   taskBox.put(1, TaskEntry.newTask(taskName: 'Lari-lari', taskIcon: '🏃🏻‍♂️'));
